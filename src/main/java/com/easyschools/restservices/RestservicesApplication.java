@@ -11,5 +11,4 @@ public class RestservicesApplication {
 		SpringApplication.run(RestservicesApplication.class, args);
 	}
 
-
 }
