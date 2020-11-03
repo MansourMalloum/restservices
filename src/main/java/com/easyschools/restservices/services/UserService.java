@@ -1,6 +1,8 @@
 package com.easyschools.restservices.services;
 
 import com.easyschools.restservices.entities.User;
+import com.easyschools.restservices.exceptions.SsnIDExistException;
+import com.easyschools.restservices.exceptions.UserNotFoundException;
 import com.easyschools.restservices.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,29 +24,64 @@ public class UserService {
     }
 
 
-    public User createUser(User user) {
+
+
+    public User createUser(User user) throws SsnIDExistException {
+        String ssn = user.getSsn();
+        Optional<User> optionalSsn = userRepository.findBySsn(ssn);
+
+        if(optionalSsn.isPresent()){
+            throw new SsnIDExistException("The given SSN ID already Exists");
+        }
         return  userRepository.save(user);
     }
 
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+
+
+
+    public Optional<User> getUserById(Long id)  throws UserNotFoundException {
+        if (userRepository.findById(id).isPresent()) {
+            return userRepository.findById(id);
+        }
+        throw new UserNotFoundException("The user you search is not found !!!!");
     }
 
 
-    public User updateUser(Long id , User user) {
-        user.setId(id); // Setting Id in the persistent content
+
+
+    public User updateUser(Long id , User user) throws UserNotFoundException{
+
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if(optionalUser.isEmpty()){
+           throw new UserNotFoundException("The user is not found on the DB");
+        }
+
         userRepository.save(user);
         return user;
     }
 
 
 
-    public void  deleteUserById(Long id) {
+
+
+
+    public void  deleteUserById(Long id) throws UserNotFoundException {
+
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if(optionalUser.isEmpty()){
+            throw new UserNotFoundException("The user is not found on the DB");
+        }
+
        userRepository.deleteById(id);
     }
 
 
-    public User findByUserBySsn(String ssn) {
+
+
+    public Optional<User> findByUserBySsn(String ssn)  {
+
         return userRepository.findBySsn(ssn);
     }
 
