@@ -2,6 +2,7 @@ package com.easyschools.restservices.entities;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -28,6 +29,18 @@ public class User {
 
     @Column(name = "SSN" , length = 50 , unique=true)
     private String ssn;
+
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
 
     public Long getId() {
         return id;

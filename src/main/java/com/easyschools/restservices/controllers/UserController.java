@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping(value = "users")
 public class UserController {
 
     private final UserService userService;
@@ -25,13 +26,13 @@ public class UserController {
     }
 
 
-    @GetMapping("/users")
+    @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
 
-    @PostMapping("/users")
+    @PostMapping
     public ResponseEntity<Void>  createUser(@RequestBody User user , UriComponentsBuilder build) throws SsnIDExistException {
         try {
 
@@ -47,7 +48,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     public Optional<User> getUser(@PathVariable Long id) throws UserNotFoundException {
         try {
             return userService.getUserById(id);
@@ -57,7 +58,7 @@ public class UserController {
 
     }
 
-    @PutMapping("/user/{id}")
+    @PutMapping("/{id}")
     public User updateUser(@RequestBody User user, @PathVariable Long id) throws UserNotFoundException {
 
         try {
@@ -68,7 +69,7 @@ public class UserController {
     }
 
 
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/{id}")
     public void deleteUserById(@PathVariable Long id) throws UserNotFoundException {
         try {
             userService.deleteUserById(id);
@@ -77,16 +78,12 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/bySsn/{ssn}")
+    @GetMapping("/bySsn/{ssn}")
     public Optional<User> findUserBySsn(@PathVariable String ssn) {
 
         return userService.findByUserBySsn(ssn);
 
     }
 }
-
-
-
-
 
 

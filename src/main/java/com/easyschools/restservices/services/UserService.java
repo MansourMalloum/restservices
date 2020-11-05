@@ -65,7 +65,6 @@ public class UserService {
 
 
 
-
     public void  deleteUserById(Long id) throws UserNotFoundException {
 
         Optional<User> optionalUser = userRepository.findById(id);
